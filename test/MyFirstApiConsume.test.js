@@ -4,10 +4,12 @@ const chai = require('chai');
 
 const expect = chai.expect;
 
+const url_base = 'https://httpbin.org/'
+
 describe('First Api Tests', () => {
 
     it('Consume GET Service', async () => {
-        const response = await agent.get('https://httpbin.org/ip');
+        const response = await agent.get(url_base+'ip');
       
         expect(response.status).to.equal(statusCode.StatusCodes.OK);
         expect(response.body).to.have.property('origin');
@@ -20,14 +22,14 @@ describe('First Api Tests', () => {
           city: 'New York'
         };
       
-        const response = await agent.get('https://httpbin.org/get').query(query);
+        const response = await agent.get(url_base+'get').query(query);
       
         expect(response.status).to.equal(statusCode.StatusCodes.OK);
         expect(response.body.args).to.eql(query);
     });
 
     it('Consume HEAD Service', async () => {
-      const response = await agent.head('https://httpbin.org/headers');
+      const response = await agent.head(url_base+'headers');
     
       expect(response.status).to.equal(statusCode.StatusCodes.OK);
       expect(response.headers).to.have.property('date');
@@ -43,7 +45,7 @@ describe('First Api Tests', () => {
         city: 'New York'
       };
 
-      const response = await agent.patch('https://httpbin.org/patch').send(args);
+      const response = await agent.patch(url_base+'patch').send(args);
 
       expect(response.status).to.equal(statusCode.StatusCodes.OK);
       expect(response.body.json).to.eql(args);
@@ -57,7 +59,7 @@ describe('First Api Tests', () => {
         city: 'New York'
       };
   
-      const response = await agent.put('https://httpbin.org/put').send(args);
+      const response = await agent.put(url_base+'put').send(args);
 
       expect(response.status).to.equal(statusCode.StatusCodes.OK);
       expect(response.body.json).to.eql(args);
@@ -70,7 +72,7 @@ describe('First Api Tests', () => {
         city: 'New York'
       };
   
-      const response = await agent.del('https://httpbin.org/delete').send(args);
+      const response = await agent.del(url_base+'delete').send(args);
       
       expect(response.status).to.equal(statusCode.StatusCodes.OK);
       expect(response.body.json).to.eql(args);
