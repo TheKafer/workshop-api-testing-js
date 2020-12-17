@@ -18,8 +18,7 @@ describe('Github Api Test', () => {
     });
   });
 
-  it('Via OAuth2 Tokens by parameter', () =>
-  agent.get(`${urlBase}/repos/${githubUserName}/${repository}`)
+  it('Via OAuth2 Tokens by parameter', () => agent.get(`${urlBase}/repos/${githubUserName}/${repository}`)
     .query(`access_token=${process.env.ACCESS_TOKEN}`)
     .set('User-Agent', 'agent')
     .then((response) => {
