@@ -23,7 +23,7 @@ describe('Github Api Test', () => {
     .query(`access_token=${process.env.ACCESS_TOKEN}`)
     .set('User-Agent', 'agent')
     .then((response) => {
-      expect(response.status).to.equal(statusCode.OK);
+      expect(response.status).to.equal(statusCode.StatusCodes.OK);
       expect(response.body.description).equal('This is a Workshop about Api Testing in JavaScript');
     }));
 });
