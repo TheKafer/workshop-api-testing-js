@@ -44,17 +44,20 @@ describe('Given a user the github', () => {
       expect(repository.description).to.equal('An awesome html report for Jasmine');
     });
 
-    describe('When download the zip of repository', () => {
+    describe(`Given the repository ${repository.full_name}`, () => {
       let zip;
 
-      before(async () => {
-        const downloadResponse = await agent.get(`${repository.svn_url}/archive/master.zip`).auth('token', process.env.ACCESS_TOKEN).set('User-Agent', 'agent').buffer(true);
-        zip = downloadResponse;
-      });
+      describe('When get request is sent to download', () => {
 
-      it('Then the repository should be downloaded', () => {
-        expect(md5(zip.text)).to.not.equal(falseMd5);
-      });
+        before(async () => {
+            const downloadResponse = await agent.get(`${repository.svn_url}/archive/master.zip`).auth('token', process.env.ACCESS_TOKEN).set('User-Agent', 'agent').buffer(true);
+            zip = downloadResponse;
+        });
+
+        it('Then the repository should be downloaded', () => {
+            expect(md5(zip.text)).to.not.equal(falseMd5);
+        });
+    });
 
       describe('When get files', () => {
         let listFiles;
