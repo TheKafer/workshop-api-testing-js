@@ -31,9 +31,7 @@
     "eslint-plugin-import": "^2.22.1",
     "http-status-codes": "^2.1.4",
     "mocha": "^8.2.1",
-    "mochawesome": "^6.2.1",
-    "travis": "^0.1.1",
-    "travis-cli": "^1.0.9"
+    "mochawesome": "^6.2.1"
   },
   "dependencies": {
     "superagent": "^6.1.0",
