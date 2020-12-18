@@ -12,7 +12,7 @@ describe('Given a user the github', () => {
   const username = 'aperdomob';
   const repositorySearch = 'jasmine-awesome-report';
   const expectedMd5 = '0e62b07144b4fa997eedb864ff93e26b';
-  const falseMd5 = '0e62b07144b4fa997eedb864ff93527b'
+  const falseMd5 = '0e62b07144b4fa997eedb864ff93527b';
   const format = {
     name: 'README.md',
     path: 'README.md',
@@ -23,7 +23,7 @@ describe('Given a user the github', () => {
     let repositories;
     let repository;
     let user;
-   
+
     before(async () => {
       const userResponse = await agent.get(`${url}/users/${username}`).auth('token', process.env.ACCESS_TOKEN).set('User-Agent', 'agent');
       user = userResponse.body;
@@ -44,20 +44,19 @@ describe('Given a user the github', () => {
       expect(repository.description).to.equal('An awesome html report for Jasmine');
     });
 
-    describe(`Given the repository ${repository.full_name}`, () => {
+    describe('Given the repository', () => {
       let zip;
 
       describe('When get request is sent to download', () => {
-
         before(async () => {
-            const downloadResponse = await agent.get(`${repository.svn_url}/archive/master.zip`).auth('token', process.env.ACCESS_TOKEN).set('User-Agent', 'agent').buffer(true);
-            zip = downloadResponse;
+          const downloadResponse = await agent.get(`${repository.svn_url}/archive/master.zip`).auth('token', process.env.ACCESS_TOKEN).set('User-Agent', 'agent').buffer(true);
+          zip = downloadResponse;
         });
 
         it('Then the repository should be downloaded', () => {
-            expect(md5(zip.text)).to.not.equal(falseMd5);
+          expect(md5(zip.text)).to.not.equal(falseMd5);
         });
-    });
+      });
 
       describe('When get files', () => {
         let listFiles;
