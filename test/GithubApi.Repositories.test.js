@@ -10,12 +10,19 @@ const url = 'https://api.github.com';
 
 describe('Given a user the github', () => {
   const username = 'aperdomob';
+  const repositorySearch = 'jasmine-awesome-report';
 
   describe('when get user', () => {
     let repositories;
     let repository;
     let user;
-    const repositorySearch = 'jasmine-awesome-report';
+    const format = {
+      name: 'README.md',
+      path: 'README.md',
+      sha: 'b9900ca9b34077fe6a8f2aaa37a173824fa9751d'
+    };
+
+    const expectedMd5 = '0e62b07144b4fa997eedb864ff93e26b';
 
     before(async () => {
       const userResponse = await agent.get(`${url}/users/${username}`).auth('token', process.env.ACCESS_TOKEN).set('User-Agent', 'agent');
@@ -50,13 +57,6 @@ describe('Given a user the github', () => {
       });
 
       describe('When get files', () => {
-        const format = {
-          name: 'README.md',
-          path: 'README.md',
-          sha: 'b9900ca9b34077fe6a8f2aaa37a173824fa9751d'
-        };
-
-        const expectedMd5 = '0e62b07144b4fa997eedb864ff93e26b';
         let listFiles;
         let readme;
         let fileContent;
