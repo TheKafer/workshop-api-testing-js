@@ -11,19 +11,19 @@ const url = 'https://api.github.com';
 describe('Given a user the github', () => {
   const username = 'aperdomob';
   const repositorySearch = 'jasmine-awesome-report';
+  const expectedMd5 = '0e62b07144b4fa997eedb864ff93e26b';
+  const falseMd5 = '0e62b07144b4fa997eedb864ff93527b'
+  const format = {
+    name: 'README.md',
+    path: 'README.md',
+    sha: 'b9900ca9b34077fe6a8f2aaa37a173824fa9751d'
+  };
 
   describe('when get user', () => {
     let repositories;
     let repository;
     let user;
-    const format = {
-      name: 'README.md',
-      path: 'README.md',
-      sha: 'b9900ca9b34077fe6a8f2aaa37a173824fa9751d'
-    };
-
-    const expectedMd5 = '0e62b07144b4fa997eedb864ff93e26b';
-
+   
     before(async () => {
       const userResponse = await agent.get(`${url}/users/${username}`).auth('token', process.env.ACCESS_TOKEN).set('User-Agent', 'agent');
       user = userResponse.body;
@@ -53,7 +53,7 @@ describe('Given a user the github', () => {
       });
 
       it('Then the repository should be downloaded', () => {
-        expect(md5(zip.text)).to.not.equal('0000000000000000000000');
+        expect(md5(zip.text)).to.not.equal(falseMd5);
       });
 
       describe('When get files', () => {
