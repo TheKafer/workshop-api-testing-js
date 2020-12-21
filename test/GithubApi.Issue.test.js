@@ -31,42 +31,43 @@ describe('Given a github user', () => {
     it('Then should have the public repository', () => {
       expect(repository).to.not.equal(undefined);
     });
-  });
-  describe('And wanna create a new issue', () => {
-    const newIssue = {
-      title: 'this is my first issue created by api'
-    };
-    const bodyIssue = {
-      body: ':)'
-    };
-    let issue;
 
-    before(async () => {
-      const issueResponse = await agent.post(`${urlApi}/repos/${repository.full_name}/issues`, newIssue)
-        .auth('token', process.env.ACCESS_TOKEN)
-        .set('User-Agent', 'agent');
-      issue = issueResponse.body;
-    });
-
-    it('Then the issue should be created', () => {
-      expect(issue.title).to.equal(newIssue.title);
-      expect(issue.body).to.equal(null);
-    });
-
-    describe('When modify an issue', () => {
-      let modifiedIssue;
+    describe('And wanna create a new issue', () => {
+      const newIssue = {
+        title: 'this is my first issue created by api'
+      };
+      const bodyIssue = {
+        body: ':)'
+      };
+      let issue;
 
       before(async () => {
-        const response = await agent.patch(`${urlApi}/repos/${user.login}/${repository.name}/issues/${issue.number}`, bodyIssue)
+        const issueResponse = await agent.post(`${urlApi}/repos/${repository.full_name}/issues`, newIssue)
           .auth('token', process.env.ACCESS_TOKEN)
           .set('User-Agent', 'agent');
-
-        modifiedIssue = response.body;
+        issue = issueResponse.body;
       });
 
-      it('Then add the body', () => {
-        expect(modifiedIssue.title).to.equal(newIssue.title);
-        expect(modifiedIssue.body).to.equal(bodyIssue.body);
+      describe('When modify an issue', () => {
+        let modifiedIssue;
+
+        before(async () => {
+          const response = await agent.patch(`${urlApi}/repos/${user.login}/${repository.name}/issues/${issue.number}`, bodyIssue)
+            .auth('token', process.env.ACCESS_TOKEN)
+            .set('User-Agent', 'agent');
+
+          modifiedIssue = response.body;
+        });
+
+        it('Then add the body', () => {
+          expect(modifiedIssue.title).to.equal(newIssue.title);
+          expect(modifiedIssue.body).to.equal(bodyIssue.body);
+        });
+      });
+
+      it('Then the issue should be created', () => {
+        expect(issue.title).to.equal(newIssue.title);
+        expect(issue.body).to.equal(null);
       });
     });
   });
