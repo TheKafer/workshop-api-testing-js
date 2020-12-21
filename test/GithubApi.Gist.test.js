@@ -51,13 +51,13 @@ describe('Given a github user', () => {
       let gistResponse;
 
       before(async () => {
-        gistQueryResponse = await agent
+        gistResponse = await agent
           .get(gist.url)
           .set('User-Agent', 'agent')
           .auth('token', process.env.ACCESS_TOKEN);
       });
 
-      it('Then the Gits should be accessible', () => expect(gistQueryResponse.status).to.equal(statusCode.OK));
+      it('Then the Gits should be accessible', () => expect(gistResponse.status).to.equal(statusCode.OK));
 
       describe('When delete a gist', () => {
         let deleteGistQuery;
