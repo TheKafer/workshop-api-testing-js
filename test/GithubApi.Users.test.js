@@ -3,6 +3,8 @@ const responseTime = require('superagent-response-time');
 const { expect } = require('chai');
 
 const urlApi = 'https://api.github.com';
+const usersTest1 = 10;
+const usersTest2 = 50;
 
 describe('Given a github user', () => {
   describe('When gets all users', () => {
@@ -31,7 +33,7 @@ describe('Given a github user', () => {
         .get(`${urlApi}/users`)
         .auth('token', process.env.ACCESS_TOKEN)
         .set('User-Agent', 'agent')
-        .query({ per_page: 10 });
+        .query({ per_page: usersTest1 });
 
       users = response.body;
     });
@@ -49,7 +51,7 @@ describe('Given a github user', () => {
         .get(`${urlApi}/users`)
         .auth('token', process.env.ACCESS_TOKEN)
         .set('User-Agent', 'agent')
-        .query({ per_page: 50 });
+        .query({ per_page: usersTest2 });
 
       users = oneHundredUsersQuery.body;
     });

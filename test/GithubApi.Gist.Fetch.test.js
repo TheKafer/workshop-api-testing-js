@@ -65,7 +65,10 @@ describe('Given a github user', () => {
         });
       });
 
-      it('Then the Gits should be accessible', () => expect(gistResponse.status).to.equal(statusCode.StatusCodes.OK));
+      it('Then the Gits should be accessible', () => {
+        expect(gistResponse.status).to.equal(statusCode.StatusCodes.OK);
+        expect(gist).to.containSubset(createGist);
+      });
 
       describe('When delete a gist', () => {
         let deleteGistQuery;
