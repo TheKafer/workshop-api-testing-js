@@ -1,6 +1,7 @@
-const agent = require('superagent');
+const isomorphic = require('isomorphic-fetch');
 const chai = require('chai');
 const statusCode = require('http-status-codes');
+const agent = require('superagent');
 
 chai.use(require('chai-subset'));
 
@@ -19,7 +20,11 @@ const urlBase = 'https://api.github.com';
 
 describe('Given a github user', () => {
   describe('When create a gist', () => {
+    const defaultHeaders = {
+      Authorization: `token ${process.env.ACCESS_TOKEN}`
+    };
     let gist;
+    let status;
 
     const createGist = {
       description: 'this is an example about promise',
@@ -31,19 +36,20 @@ describe('Given a github user', () => {
       }
     };
 
-    let newGistResponse;
-
     before(async () => {
-      newGistResponse = await agent
-        .post(`${urlBase}/gists`, createGist)
-        .set('User-Agent', 'agent')
-        .auth('token', process.env.ACCESS_TOKEN);
+      const parameters = {
+        method: 'POST',
+        body: JSON.stringify(createGist),
+        headers: defaultHeaders
+      };
 
-      gist = newGistResponse.body;
+      const response = await isomorphic(`${urlBase}/gists`, parameters);
+      status = response.status;
+      gist = await response.json();
     });
 
     it('Then a new gist should be created', () => {
-      expect(newGistResponse.status).to.equal(statusCode.StatusCodes.CREATED);
+      expect(status).to.equal(statusCode.StatusCodes.CREATED);
       expect(gist).to.containSubset(createGist);
     });
 
@@ -51,22 +57,24 @@ describe('Given a github user', () => {
       let gistResponse;
 
       before(async () => {
-        gistResponse = await agent
-          .get(gist.url)
-          .set('User-Agent', 'agent')
-          .auth('token', process.env.ACCESS_TOKEN);
+        gistResponse = await isomorphic(gist.url, {
+          method: 'GET',
+          headers: {
+            Authorization: `token ${process.env.ACCESS_TOKEN}`
+          }
+        });
       });
 
-      it('Then the Gits should be accessible', () => expect(gistResponse.status).to.equal(statusCode.StatusCodes.OK));
+      it('Then the Gits should be accessible', () => {
+        expect(gistResponse.status).to.equal(statusCode.StatusCodes.OK);
+        expect(gist).to.containSubset(createGist);
+      });
 
       describe('When delete a gist', () => {
         let deleteGistQuery;
 
         before(async () => {
-          deleteGistQuery = await agent
-            .del(gist.url)
-            .set('User-Agent', 'agent')
-            .auth('token', process.env.ACCESS_TOKEN);
+          deleteGistQuery = await isomorphic(gist.url, { method: 'DELETE', headers: defaultHeaders });
         });
 
         it('Then the gist should be deleted', () => expect(deleteGistQuery.status).to.equal(statusCode.StatusCodes.NO_CONTENT));
@@ -87,7 +95,7 @@ describe('Given a github user', () => {
         });
 
         it('Then the Gits should not be accessible', () => {
-          expect(responseStatus).to.equal(statusCode.StatusCodes.NOT_FOUND);
+          expect(responseStatus).to.equal(statusCode.NOT_FOUND);
         });
       });
     });
